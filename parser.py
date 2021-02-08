@@ -1,6 +1,6 @@
 digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'}
 operators = {'+', '-', '*', '/', '^', '(', ')'}
-# Diccionario de operaciones aritméticas.
+# Arithmetic operations dictionary.
 operations = {'+': lambda x, y: x + y, '-': lambda x, y: x - y,
               '*': lambda x, y: x * y, '/': lambda x, y: x / y,
               '^': lambda x, y: x ** y}
@@ -62,20 +62,20 @@ class Parser:
     def parse(self, tokens: str) -> Tree:
         i = 0
         operator_stack = []
-        number = ""  # Variable para ir añadiendo dígitos de un número
+        number = ""  # Add the digits to our number.
         
         while i < len(tokens):
             if tokens[i] not in operators and tokens[i] not in digits:
                 raise ParserException("Invalid Token")
 
-            # Vamos extrayendo los dígitos para formar los operandos.
+            # Let's create our operands with the digits we find.
             while i < len(tokens) and tokens[i] not in operators:
                 number += tokens[i]
                 i += 1
 
             if number:
                 self.__parse_tree(number)
-                number = ""  # Borramos nuestro string para comenzar otra vez.
+                number = ""  # Let's delete our string so we can start anew.
 
             if i >= len(tokens):
                 break
@@ -90,7 +90,7 @@ class Parser:
 
             elif tokens[i] == '(':
                 operator_stack.append(tokens[i])
-            else:  # Entonces el token es un paréntesis derecho.
+            else:  # The token is a right parenthesis.
                 while operator_stack and operator_stack[-1] != '(':
                     self.__parse_tree(operator_stack.pop())
 
