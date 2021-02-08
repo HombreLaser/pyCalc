@@ -40,7 +40,10 @@ class Tree:
         return operations[self.data](operand1, operand2)
 
 class Parser:
-    def __parse_tree(self, token: str, tree_stack: list):
+    def __init__(self):
+        self.tree_stack = []
+    
+    def __parse_tree(self, token: str):
         if not token:
             raise ParserException("Invalid Syntax")
   
@@ -48,17 +51,16 @@ class Parser:
 
         if tree.data in operators:
             try:
-                tree.right = tree_stack.pop()
-                tree.left = tree_stack.pop()
+                tree.right = self.tree_stack.pop()
+                tree.left = self.tree_stack.pop()
             except IndexError:
                 raise ParserException("Invalid Syntax")
 
-        tree_stack.append(tree)
+        self.tree_stack.append(tree)
 
 
     def parse(self, tokens: str) -> Tree:
         i = 0
-        tree_stack = []
         operator_stack = []
         number = ""  # Variable para ir añadiendo dígitos de un número
         
@@ -72,7 +74,7 @@ class Parser:
                 i += 1
 
             if number:
-                self.__parse_tree(number, tree_stack)
+                self.__parse_tree(number)
                 number = ""  # Borramos nuestro string para comenzar otra vez.
 
             if i >= len(tokens):
@@ -82,7 +84,7 @@ class Parser:
                 while (operator_stack
                        and precedence[operator_stack[-1]] >= precedence[tokens[i]]
                        and operator_stack[-1] != '('):
-                    self.__parse_tree(operator_stack.pop(), tree_stack)
+                    self.__parse_tree(operator_stack.pop())
                     
                 operator_stack.append(tokens[i])
 
@@ -90,7 +92,7 @@ class Parser:
                 operator_stack.append(tokens[i])
             else:  # Entonces el token es un paréntesis derecho.
                 while operator_stack and operator_stack[-1] != '(':
-                    self.__parse_tree(operator_stack.pop(), tree_stack)
+                    self.__parse_tree(operator_stack.pop())
 
                 if not operator_stack:
                     raise ParserException("Mismatched parenthesis")
@@ -103,11 +105,11 @@ class Parser:
             if operator_stack[-1] == '(' or operator_stack == ')':
                 raise ParserException("Mismatched parenthesis")
 
-            self.__parse_tree(operator_stack.pop(), tree_stack)
+            self.__parse_tree(operator_stack.pop())
 
-        tree = tree_stack.pop()
+        tree = self.tree_stack.pop()
 
-        if tree_stack:
+        if self.tree_stack:
             raise ParserException("Invalid syntax")
 
         return tree
