@@ -15,7 +15,7 @@ def main():
             sys.exit()
         
         try:
-            syntax_tree = my_parser.parse(expression.lstrip('')))
+            syntax_tree = my_parser.parse(expression.lstrip(''))
         except infix_parser.ParserException as exc:
             print(exc.message)
             continue
