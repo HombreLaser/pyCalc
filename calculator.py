@@ -20,8 +20,11 @@ def main():
             print(exc.message)
             continue
 
-        print(f"## {syntax_tree.eval():.5f}")
-
+        try:
+            print(f"## {syntax_tree.eval():.5f}")
+        except ZeroDivisionError:
+            print("Cannot divide by zero")
+            
 
 if __name__ == "__main__":
     main()

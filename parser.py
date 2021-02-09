@@ -54,7 +54,7 @@ class Parser:
                 tree.right = self.tree_stack.pop()
                 tree.left = self.tree_stack.pop()
             except IndexError:
-                raise ParserException("Invalid Syntax")
+                raise ParserException("Invalid Syntax") from IndexError
 
         self.tree_stack.append(tree)
 
