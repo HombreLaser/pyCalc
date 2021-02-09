@@ -1,16 +1,6 @@
 import sys
 import parser as infix_parser
 
-def remove_spaces(string: str) -> str:
-    curated = ""
-
-    for char in string:
-        if char != ' ':
-            curated += char
-
-    return curated
-
-
 def main():
     """
     Main loop
@@ -25,7 +15,7 @@ def main():
             sys.exit()
         
         try:
-            syntax_tree = my_parser.parse(remove_spaces(expression))
+            syntax_tree = my_parser.parse(expression.lstrip('')))
         except infix_parser.ParserException as exc:
             print(exc.message)
             continue
